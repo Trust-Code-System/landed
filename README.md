@@ -2,7 +2,9 @@
 
 A responsive landing page for a career service offering CV rewriting, job applications, and interview preparation.
 
-![Landed landing page](previews/hero.png)
+[Live website](https://landed-indol-one.vercel.app/) · [Source repository](https://github.com/Trust-Code-System/landed)
+
+![Landed landing page](previews/desktop-current.jpg)
 
 ## Features
 
