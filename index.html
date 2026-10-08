@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Landed · Your job search, handled.</title>
+<meta name="description" content="We rewrite your CV, apply to hand-picked roles on your behalf, and coach you for interviews. A done-for-you career service for Nigerian and global job seekers." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2317130C'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='36' font-style='italic' fill='%23FBF9F4' text-anchor='middle'%3EL%3C/text%3E%3Ccircle cx='46' cy='20' r='5' fill='%23D93A22'/%3E%3C/svg%3E" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Caveat:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+/* ============================================================
+   LANDED · Design tokens
+   ============================================================ */
+:root {
+  --paper:      #FBF9F4;
+  --paper-2:    #F4F1E9;
+  --ink:        #17130C;
+  --ink-soft:   #4A443A;
+  --muted:      #8A8175;
+  --hairline:   #E3DDD0;
+  --red:        #D93A22;
+  --red-deep:   #B02A16;
+  --highlight:  #FFE9A3;
+  --green:      #1E4D3B;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body:    "Satoshi", "Helvetica Neue", Arial, sans-serif;
+  --font-hand:    "Caveat", cursive;
+  --font-mono:    "IBM Plex Mono", monospace;
+
+  --ease-out:   cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-io:    cubic-bezier(0.77, 0, 0.175, 1);
+
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+  --maxw: 1240px;
+}
+
+/* ============================================================
+   Reset / base
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: auto; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Paper grain */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection { background: var(--red); color: var(--paper); }
+
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+
+:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ============================================================
+   Scrollbar · brand scheme (WebKit + Firefox)
+   ============================================================ */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink) var(--paper-2);
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--paper-2); }
+::-webkit-scrollbar-thumb {
+  background: var(--ink);
+  border-radius: 999px;
+  border: 2px solid var(--paper-2);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--red); }
+::-webkit-scrollbar-corner { background: var(--paper-2); }
+
+/* ============================================================
+   Dropdowns / selects · brand scheme
+   ============================================================ */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--ink);
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 L6 6.5 L11 1.5' fill='none' stroke='%23D93A22' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 1rem center;
+  border: 1.5px solid var(--hairline);
+  border-radius: 10px;
+  padding: 0.75rem 2.75rem 0.75rem 1rem;
+  cursor: pointer;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+select:hover { border-color: var(--ink); }
+select:focus-visible {
+  outline: none;
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--red) 18%, transparent);
+}
+select option { background: var(--paper); color: var(--ink); }
+
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* ============================================================
+   Type utilities
+   ============================================================ */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.eyebrow::before {
+  content: "";
+  width: 1.75rem;
+  height: 1px;
+  background: var(--red);
+}
+
+.hand {
+  font-family: var(--font-hand);
+  font-weight: 600;
+  color: var(--red);
+  line-height: 1.1;
+}
+
+.mark {
+  background: linear-gradient(to top, transparent 8%, var(--highlight) 8%, var(--highlight) 88%, transparent 88%);
+  padding: 0 0.12em;
+  border-radius: 2px;
+}
+
+/* ============================================================
+   Nav
+   ============================================================ */
+.nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  transition: background 300ms ease, box-shadow 300ms ease, border-color 300ms ease;
+  border-bottom: 1px solid transparent;
+}
+.nav.is-scrolled {
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom-color: var(--hairline);
+}
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4.5rem;
+}
+.nav__logo {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+.nav__logo sup { font-size: 0.55em; color: var(--red); font-family: var(--font-mono); }
+.nav__links {
+  display: flex;
+  gap: 2.25rem;
+  list-style: none;
+}
+.nav__links a {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  position: relative;
+  transition: color 200ms ease;
+}
+.nav__links a::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: -4px;
+  width: 100%; height: 1.5px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 250ms var(--ease-out);
+}
+.nav__links a:hover { color: var(--ink); }
+.nav__links a:hover::after { transform: scaleX(1); transform-origin: left; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: 999px;
+  transition: transform 160ms var(--ease-out), background 200ms ease, color 200ms ease, box-shadow 200ms ease;
+  will-change: transform;
+}
+.btn:active { transform: scale(0.97); }
+.btn--primary {
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+}
+.btn--primary:hover { background: var(--red); }
+.btn--ghost {
+  border: 1.5px solid var(--ink);
+  color: var(--ink);
+}
+.btn--ghost:hover { background: var(--ink); color: var(--paper); }
+.btn--sm { padding: 0.6rem 1.2rem; font-size: 0.875rem; }
+.btn .arr { transition: transform 200ms var(--ease-out); }
+.btn:hover .arr { transform: translateX(3px); }
+
+/* ============================================================
+   Hero
+   ============================================================ */
+.hero {
+  position: relative;
+  padding: clamp(8rem, 14vh, 11rem) 0 clamp(4rem, 8vh, 6rem);
+  overflow: hidden;
+}
+.hero__grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(3rem, 7.2vw, 6.25rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  margin: 1.5rem 0 1.75rem;
+}
+.hero h1 .word { display: inline-block; }
+.hero h1 em {
+  font-style: italic;
+  font-weight: 400;
+}
+.hero__circled {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+.hero__circled svg {
+  position: absolute;
+  inset: -18% -9% -22% -9%;
+  width: 118%;
+  height: 140%;
+  overflow: visible;
+  pointer-events: none;
+}
+.hero__circled svg path {
+  fill: none;
+  stroke: var(--red);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+.hero__sub {
+  font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
+  color: var(--ink-soft);
+  max-width: 34rem;
+  margin-bottom: 2.25rem;
+}
+.hero__ctas { display: flex; flex-wrap: wrap; gap: 0.9rem; align-items: center; }
+.hero__note {
+  margin-top: 1.1rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.hero__note .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+
+/* Hero visual · annotated CV document */
+.hero__visual { position: relative; }
+.doc {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  box-shadow:
+    0 1px 2px rgba(23,19,12,0.04),
+    0 12px 32px -12px rgba(23,19,12,0.14);
+  padding: 1.75rem 1.75rem 2rem;
+  transform: rotate(1.5deg);
+}
+.doc::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: repeating-linear-gradient(transparent 0 27px, rgba(23,19,12,0.025) 27px 28px);
+  pointer-events: none;
+}
+.doc__head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.1rem; }
+.doc__name { font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; letter-spacing: -0.01em; }
+.doc__role { font-size: 0.8rem; color: var(--muted); font-family: var(--font-mono); margin-top: 2px; }
+.doc__stamp {
+  font-family: var(--font-hand);
+  font-size: 1.15rem;
+  color: var(--red);
+  border: 2px solid var(--red);
+  border-radius: 6px;
+  padding: 0.1rem 0.6rem;
+  transform: rotate(6deg);
+  opacity: 0.9;
+}
+.doc__line { margin-bottom: 0.85rem; }
+.doc__line .lbl {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+.doc__line .bar { height: 8px; border-radius: 4px; background: var(--paper-2); position: relative; overflow: visible; }
+.doc__line .bar + .bar { margin-top: 6px; }
+.doc__line .bar.w-90 { width: 90%; } .doc__line .bar.w-75 { width: 75%; }
+.doc__line .bar.w-60 { width: 60%; } .doc__line .bar.w-45 { width: 45%; }
+.doc__strike { position: relative; display: inline-block; }
+.doc__strike::after {
+  content: "";
+  position: absolute;
+  left: -4%; top: 52%;
+  width: 108%; height: 3px;
+  background: var(--red);
+  border-radius: 2px;
+  transform: rotate(-1.5deg);
+}
+.doc__anno {
+  position: absolute;
+  font-family: var(--font-hand);
+  font-weight: 600;
+  color: var(--red);
+  font-size: 1.3rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+.doc__anno--1 { top: 22%; right: -1.4rem; transform: rotate(4deg); }
+.doc__anno--2 { bottom: 14%; left: -1.6rem; transform: rotate(-5deg); }
+.doc__anno svg { display: block; margin-top: 2px; }
+
+/* Floating status chips */
+.chip {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 0.55rem 1rem 0.55rem 0.7rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  box-shadow: 0 8px 24px -8px rgba(23,19,12,0.18);
+  white-space: nowrap;
+}
+.chip .ico {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+}
+.chip--applied { top: -1.4rem; left: -2.2rem; transform: rotate(-4deg); }
+.chip--applied .ico { background: var(--paper-2); color: var(--ink); }
+.chip--interview { top: 38%; right: -2.6rem; transform: rotate(3deg); }
+.chip--interview .ico { background: var(--highlight); color: var(--ink); }
+.chip--offer { bottom: -1.6rem; left: 12%; transform: rotate(-2deg); }
+.chip--offer .ico { background: var(--green); color: #fff; }
+.chip small { display: block; font-weight: 500; color: var(--muted); font-size: 0.68rem; }
+
+/* Proof strip */
+.proof {
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  margin-top: clamp(3.5rem, 7vh, 5.5rem);
+}
+.proof__inner {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.proof__item {
+  padding: 1.6rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.proof__item + .proof__item { border-left: 1px solid var(--hairline); }
+.proof__num {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.proof__lbl { font-size: 0.8125rem; color: var(--muted); }
+
+/* ============================================================
+   Marquee
+   ============================================================ */
+.marquee {
+  background: var(--ink);
+  color: var(--paper);
+  transform: rotate(-1.2deg) scale(1.02);
+  margin: clamp(3rem, 7vh, 5rem) 0;
+  overflow: hidden;
+  padding: 0.9rem 0;
+}
+.marquee__track {
+  display: flex;
+  gap: 3rem;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+.marquee__track span {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  white-space: nowrap;
+}
+.marquee__track span::after { content: "✳"; font-style: normal; color: var(--red); font-size: 0.9em; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ============================================================
+   Sections · shared
+   ============================================================ */
+.section { padding: clamp(4.5rem, 10vh, 8rem) 0; }
+.section__head { max-width: 46rem; margin-bottom: clamp(2.5rem, 5vh, 4rem); }
+.section__head h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.1rem, 4.4vw, 3.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin: 1.25rem 0 1rem;
+}
+.section__head p { color: var(--ink-soft); font-size: 1.125rem; max-width: 38rem; }
+.section__head .hand { font-size: 1.4rem; margin-top: 0.9rem; display: inline-block; transform: rotate(-2deg); }
+
+/* ============================================================
+   Problem
+   ============================================================ */
+.problem { background: var(--paper-2); border-block: 1px solid var(--hairline); }
+.problem__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: center;
+}
+.problem__big {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.9rem, 3.4vw, 2.9rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.problem__big .mark { font-style: italic; }
+.problem__list { list-style: none; display: flex; flex-direction: column; }
+.problem__list li {
+  display: flex;
+  gap: 1.1rem;
+  padding: 1.35rem 0;
+  border-bottom: 1px solid var(--hairline);
+  align-items: baseline;
+}
+.problem__list li:first-child { border-top: 1px solid var(--hairline); }
+.problem__list .x {
+  font-family: var(--font-hand);
+  color: var(--red);
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+  transform: translateY(2px);
+}
+.problem__list strong { display: block; font-size: 1.0625rem; margin-bottom: 0.15rem; }
+.problem__list p { font-size: 0.9375rem; color: var(--ink-soft); }
+
+/* ============================================================
+   Services
+   ============================================================ */
+.services__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 1px solid var(--hairline);
+  border-left: 1px solid var(--hairline);
+}
+.service {
+  border-right: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  padding: clamp(1.75rem, 3vw, 2.75rem);
+  position: relative;
+  transition: background 300ms ease;
+  overflow: hidden;
+}
+.service:hover { background: #fff; }
+.service__num {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+.service h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.35rem, 2vw, 1.7rem);
+  letter-spacing: -0.01em;
+  margin: 1.1rem 0 0.6rem;
+}
+.service p { color: var(--ink-soft); font-size: 0.96875rem; max-width: 26rem; }
+.service__tag {
+  position: absolute;
+  top: 1.6rem; right: 1.6rem;
+  font-family: var(--font-hand);
+  color: var(--red);
+  font-size: 1.2rem;
+  transform: rotate(3deg);
+  opacity: 0;
+  transition: opacity 250ms ease, transform 250ms var(--ease-out);
+}
+.service:hover .service__tag { opacity: 1; transform: rotate(-2deg); }
+.service__meta {
+  margin-top: 1.4rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.service__meta span {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 0.28rem 0.7rem;
+  color: var(--ink-soft);
+  background: var(--paper);
+}
+
+/* ============================================================
+   Process
+   ============================================================ */
+.process { background: var(--ink); color: var(--paper); }
+.process .eyebrow { color: rgba(251,249,244,0.6); }
+.process .section__head h2 { color: var(--paper); }
+.process .section__head p { color: rgba(251,249,244,0.65); }
+.process__steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid rgba(251,249,244,0.15); }
+.step {
+  padding: 2rem 1.75rem 2.5rem;
+  border-right: 1px solid rgba(251,249,244,0.15);
+  position: relative;
+}
+.step:last-child { border-right: none; }
+.step__num {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 2.6rem;
+  font-weight: 400;
+  color: var(--red);
+  line-height: 1;
+}
+.step h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin: 1.4rem 0 0.5rem;
+  letter-spacing: -0.01em;
+}
+.step p { font-size: 0.9rem; color: rgba(251,249,244,0.6); }
+.step__time {
+  display: inline-block;
+  margin-top: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--highlight);
+  border: 1px solid rgba(255,233,163,0.35);
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+}
+
+/* ============================================================
+   Tracker preview
+   ============================================================ */
+.tracker { background: var(--paper-2); border-block: 1px solid var(--hairline); }
+.tracker__frame {
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  box-shadow: 0 24px 60px -30px rgba(23,19,12,0.25);
+  overflow: hidden;
+}
+.tracker__bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--hairline);
+  background: var(--paper);
+}
+.tracker__bar .dot { width: 10px; height: 10px; border-radius: 50%; }
+.tracker__bar .dot:nth-child(1) { background: #E8A79D; }
+.tracker__bar .dot:nth-child(2) { background: #EFD9A7; }
+.tracker__bar .dot:nth-child(3) { background: #B5D6B8; }
+.tracker__bar .url {
+  margin-left: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  background: var(--paper-2);
+  border-radius: 6px;
+  padding: 0.25rem 0.8rem;
+}
+.tracker__cols {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  padding: 1.25rem;
+  min-height: 300px;
+}
+.tcol__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 0.25rem 0.7rem;
+}
+.tcol__head b {
+  font-weight: 500;
+  background: var(--paper-2);
+  border-radius: 999px;
+  padding: 0.05rem 0.5rem;
+}
+.tcard {
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  padding: 0.85rem 0.95rem;
+  margin-bottom: 0.7rem;
+  font-size: 0.8125rem;
+  transition: transform 200ms var(--ease-out), box-shadow 200ms ease;
+}
+.tcard:hover { transform: translateY(-2px) rotate(-0.5deg); box-shadow: 0 10px 24px -12px rgba(23,19,12,0.25); }
+.tcard strong { display: block; font-size: 0.875rem; margin-bottom: 0.15rem; }
+.tcard span { color: var(--muted); font-size: 0.75rem; }
+.tcard .loc { display: inline-block; margin-top: 0.5rem; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-soft); background: var(--paper-2); border-radius: 4px; padding: 0.15rem 0.45rem; }
+.tcard--offer { background: var(--green); border-color: var(--green); color: #fff; }
+.tcard--offer span { color: rgba(255,255,255,0.7); }
+.tcard--offer .loc { background: rgba(255,255,255,0.15); color: #fff; }
+.tcard--hl { outline: 2px solid var(--highlight); outline-offset: -2px; }
+
+/* ============================================================
+   Pricing
+   ============================================================ */
+.pricing__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+}
+.pricing__toggle .switch {
+  width: 52px; height: 28px;
+  border-radius: 999px;
+  border: 1.5px solid var(--ink);
+  position: relative;
+  transition: background 200ms ease;
+}
+.pricing__toggle .switch::after {
+  content: "";
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 19px; height: 19px;
+  border-radius: 50%;
+  background: var(--red);
+  transition: transform 220ms var(--ease-out);
+}
+.pricing__toggle[aria-pressed="true"] .switch::after { transform: translateX(24px); }
+.pricing__toggle .cur { color: var(--muted); transition: color 200ms ease; }
+.pricing__toggle .cur.on { color: var(--ink); font-weight: 500; }
+
+.plans {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  align-items: stretch;
+}
+.plan {
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  padding: 2rem 1.9rem;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 250ms var(--ease-out), box-shadow 250ms ease;
+}
+.plan:hover { transform: translateY(-4px); box-shadow: 0 24px 48px -24px rgba(23,19,12,0.22); }
+.plan--pop {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.plan--pop .plan__desc, .plan--pop .plan__feats li { color: rgba(251,249,244,0.7); }
+.plan--pop .plan__feats li { border-color: rgba(251,249,244,0.12); }
+.plan__badge {
+  position: absolute;
+  top: -0.85rem;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  font-family: var(--font-hand);
+  font-size: 1.15rem;
+  background: var(--red);
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.15rem 1rem;
+  white-space: nowrap;
+}
+.plan__name { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.plan--pop .plan__name { color: rgba(251,249,244,0.55); }
+.plan__price {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.2rem, 3vw, 2.8rem);
+  letter-spacing: -0.02em;
+  margin: 0.9rem 0 0.1rem;
+  line-height: 1;
+}
+.plan__per { font-size: 0.85rem; color: var(--muted); }
+.plan--pop .plan__per { color: rgba(251,249,244,0.5); }
+.plan__desc { font-size: 0.9375rem; color: var(--ink-soft); margin: 1.1rem 0 1.4rem; }
+.plan__feats { list-style: none; display: flex; flex-direction: column; flex: 1; margin-bottom: 1.75rem; }
+.plan__feats li {
+  display: flex;
+  gap: 0.7rem;
+  font-size: 0.9rem;
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--hairline);
+  color: var(--ink-soft);
+  align-items: baseline;
+}
+.plan__feats li::before { content: "→"; color: var(--red); font-weight: 700; flex-shrink: 0; }
+.plan .btn { justify-content: center; }
+.plan--pop .btn--primary { background: var(--red); }
+.plan--pop .btn--primary:hover { background: var(--red-deep); }
+.pricing__fine {
+  margin-top: 1.5rem;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ============================================================
+   Testimonials
+   ============================================================ */
+.quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+.quote {
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  background: #fff;
+  padding: 1.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+.quote__text {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1.4;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  flex: 1;
+}
+.quote__text::before { content: "“"; color: var(--red); }
+.quote__text::after { content: "”"; color: var(--red); }
+.quote__who { display: flex; align-items: center; gap: 0.85rem; }
+.quote__who img {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--hairline);
+}
+.quote__who strong { display: block; font-size: 0.9rem; }
+.quote__who span { font-size: 0.78rem; color: var(--muted); }
+.quote__result {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-top: 0.35rem;
+}
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+.faq__list { max-width: 46rem; }
+.faq__item {
+  border-bottom: 1px solid var(--hairline);
+  padding-inline: 1rem;
+  margin-inline: -1rem;
+  border-radius: 10px;
+  transition: background 250ms ease;
+}
+.faq__item:first-child { border-top: 1px solid var(--hairline); }
+.faq__item.open { background: var(--paper-2); border-bottom-color: transparent; }
+.faq__item.open .faq__q { color: var(--red); }
+.faq__q {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: left;
+  padding: 1.4rem 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+  transition: color 200ms ease;
+}
+.faq__q:hover { color: var(--red); }
+.faq__q .pm {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 1.5rem;
+  color: var(--red);
+  transition: transform 250ms var(--ease-out);
+  flex-shrink: 0;
+  line-height: 1;
+}
+.faq__item.open .pm { transform: rotate(45deg); }
+.faq__a {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 350ms var(--ease-out);
+}
+.faq__a p {
+  padding: 0 0 1.5rem;
+  color: var(--ink-soft);
+  font-size: 0.96875rem;
+  max-width: 40rem;
+}
+
+/* ============================================================
+   Final CTA
+   ============================================================ */
+.final {
+  background: var(--ink);
+  color: var(--paper);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.final h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.6rem, 6vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  margin: 1.5rem 0 1.25rem;
+}
+.final h2 em { font-style: italic; color: var(--highlight); }
+.final p { color: rgba(251,249,244,0.65); max-width: 32rem; margin: 0 auto 2.25rem; font-size: 1.125rem; }
+.final .btn--primary { background: var(--paper); color: var(--ink); }
+.final .btn--primary:hover { background: var(--red); color: #fff; }
+.final .hand {
+  color: var(--highlight);
+  font-size: 1.5rem;
+  display: inline-block;
+  transform: rotate(-3deg);
+  margin-top: 1.75rem;
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.footer { border-top: 1px solid var(--hairline); padding: 3.5rem 0 2.5rem; }
+.footer__grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+.footer__logo { font-family: var(--font-display); font-weight: 600; font-size: 1.6rem; letter-spacing: -0.02em; }
+.footer__logo sup { font-size: 0.55em; color: var(--red); font-family: var(--font-mono); }
+.footer__tag { font-size: 0.875rem; color: var(--muted); margin-top: 0.5rem; max-width: 16rem; }
+.footer h4 {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+.footer ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+.footer ul a { font-size: 0.9rem; color: var(--ink-soft); transition: color 200ms ease; }
+.footer ul a:hover { color: var(--red); }
+.footer__base {
+  border-top: 1px solid var(--hairline);
+  padding-top: 1.75rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* ============================================================
+   Reveal helpers (JS enhances; content visible without JS)
+   ============================================================ */
+.js [data-reveal] { opacity: 0; transform: translateY(28px); }
+.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out);
+  transition-delay: var(--d, 0ms);
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 1020px) {
+  .hero__grid { grid-template-columns: 1fr; }
+  .hero__visual { max-width: 30rem; margin: 2.5rem auto 0; }
+  .process__steps { grid-template-columns: repeat(2, 1fr); }
+  .step:nth-child(2) { border-right: none; }
+  .step:nth-child(1), .step:nth-child(2) { border-bottom: 1px solid rgba(251,249,244,0.15); }
+  .plans, .quotes { grid-template-columns: 1fr; max-width: 30rem; margin-inline: auto; }
+  .plan--pop { order: -1; }
+  .tracker__cols { grid-template-columns: repeat(2, 1fr); }
+  .footer__grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 720px) {
+  .nav__links { display: none; }
+  .proof__inner { grid-template-columns: 1fr; }
+  .proof__item + .proof__item { border-left: none; border-top: 1px solid var(--hairline); }
+  .problem__grid { grid-template-columns: 1fr; }
+  .services__grid { grid-template-columns: 1fr; }
+  .process__steps { grid-template-columns: 1fr; }
+  .step { border-right: none; border-bottom: 1px solid rgba(251,249,244,0.15); }
+  .step:last-child { border-bottom: none; }
+  .tracker__cols { grid-template-columns: 1fr; }
+
+  /* Hero visual · keep everything inside the viewport */
+  .hero__visual { margin-top: 3.25rem; }
+  .hero__circled svg { inset: -10% -5% -14% -5%; width: 110%; height: 124%; }
+  .hero__circled svg path { stroke-width: 4; }
+  .doc { transform: rotate(0.8deg); padding: 1.3rem 1.25rem 1.6rem; }
+  .doc__stamp { font-size: 0.95rem; transform: rotate(4deg); }
+  .doc__anno { font-size: 1.05rem; }
+  .doc__anno--1 { right: 0.25rem; top: 19%; }
+  .doc__anno--2 { left: 0.25rem; }
+  .chip { font-size: 0.72rem; padding: 0.45rem 0.8rem 0.45rem 0.55rem; gap: 0.45rem; }
+  .chip .ico { width: 22px; height: 22px; }
+  .chip small { font-size: 0.62rem; }
+  .chip--applied { left: 0; top: -1.1rem; }
+  .chip--interview { right: 0; }
+  .chip--offer { left: 4%; bottom: -1.3rem; }
+
+  .footer__grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   Reduced motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .js [data-reveal] { opacity: 1; transform: none; }
+  .marquee__track { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<script>document.body.classList.add('js');</script>
+
+<!-- ================= NAV ================= -->
+<header class="nav" id="nav">
+  <div class="wrap nav__inner">
+    <a href="#" class="nav__logo">Landed<sup>®</sup></a>
+    <nav aria-label="Primary">
+      <ul class="nav__links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#process">How it works</a></li>
+        <li><a href="#tracker">Tracker</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </nav>
+    <a href="#book" class="btn btn--primary btn--sm" data-magnet>Book a free call <span class="arr">→</span></a>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero__grid">
+      <div>
+        <span class="eyebrow" data-reveal>Done-for-you career service · Lagos → the world</span>
+        <h1 id="hero-h1">
+          <span class="sr-only">Your job search, handled.</span>
+          <span aria-hidden="true" class="line">Your job search,</span><br />
+          <span aria-hidden="true" class="line"><em>properly</em> <span class="hero__circled">handled.<svg viewBox="0 0 220 90" preserveAspectRatio="none"><path id="circlePath" d="M112 8 C 40 6, 6 26, 8 46 C 10 70, 70 86, 128 82 C 186 78, 216 60, 210 40 C 204 20, 150 6, 96 10" /></svg></span></span>
+        </h1>
+        <p class="hero__sub" data-reveal style="--d:120ms">
+          We rewrite your CV, apply to hand-picked roles on your behalf every week, and coach you
+          for the interviews. You focus on showing up. <span class="mark">We handle everything before it.</span>
+        </p>
+        <div class="hero__ctas" data-reveal style="--d:220ms">
+          <a href="#book" class="btn btn--primary" data-magnet>Book a free intake call <span class="arr">→</span></a>
+          <a href="#pricing" class="btn btn--ghost" data-magnet>See packages</a>
+        </div>
+        <p class="hero__note" data-reveal style="--d:300ms">
+          <span class="dot"></span> 3 intake slots left this week · no card required
+        </p>
+      </div>
+
+      <div class="hero__visual" data-reveal style="--d:250ms">
+        <div class="doc" id="heroDoc">
+          <div class="doc__head">
+            <div>
+              <div class="doc__name">Chiamaka E.</div>
+              <div class="doc__role">Product Manager · 6 yrs</div>
+            </div>
+            <div class="doc__stamp">rewritten ✓</div>
+          </div>
+          <div class="doc__line">
+            <div class="lbl">Summary</div>
+            <div class="bar w-90"></div>
+            <div class="bar w-75"></div>
+          </div>
+          <div class="doc__line">
+            <div class="lbl">Experience</div>
+            <div class="bar w-90"></div>
+            <div class="bar w-60"></div>
+            <div class="bar w-75"></div>
+          </div>
+          <div class="doc__line">
+            <div class="lbl">Old objective</div>
+            <div style="font-size:0.85rem; color:var(--ink-soft)">
+              <span class="doc__strike">“Hard-working team player seeking a challenging role…”</span>
+            </div>
+          </div>
+          <span class="doc__anno doc__anno--1">numbers, not adjectives ↓</span>
+          <span class="doc__anno doc__anno--2">delete. always.
+            <svg width="60" height="22" viewBox="0 0 60 22"><path d="M4 4 C 20 18, 40 18, 56 6" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"/></svg>
+          </span>
+        </div>
+
+        <div class="chip chip--applied" data-float>
+          <span class="ico">↗</span>
+          <span>Applied<small>Product Designer · Moniepoint</small></span>
+        </div>
+        <div class="chip chip--interview" data-float>
+          <span class="ico">◷</span>
+          <span>Interview booked<small>Tue 11:00 · Google Meet</small></span>
+        </div>
+        <div class="chip chip--offer" data-float>
+          <span class="ico">✓</span>
+          <span>Offer received<small>Remote · $2,800/mo</small></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proof" data-reveal style="--d:350ms">
+      <div class="proof__inner">
+        <div class="proof__item">
+          <span class="proof__num" data-count="2400">0</span>
+          <span class="proof__lbl">applications sent for clients</span>
+        </div>
+        <div class="proof__item">
+          <span class="proof__num"><span data-count="87">0</span>%</span>
+          <span class="proof__lbl">interview within 6 weeks</span>
+        </div>
+        <div class="proof__item">
+          <span class="proof__num">₦0</span>
+          <span class="proof__lbl">to start. The intake call is free</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MARQUEE ================= -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span>CV Rewriting</span><span>Done-for-you Applications</span><span>Interview Coaching</span><span>LinkedIn Overhaul</span><span>Salary Negotiation</span><span>Visa-sponsored Roles</span>
+    <span>CV Rewriting</span><span>Done-for-you Applications</span><span>Interview Coaching</span><span>LinkedIn Overhaul</span><span>Salary Negotiation</span><span>Visa-sponsored Roles</span>
+  </div>
+</div>
+
+<!-- ================= PROBLEM ================= -->
+<section class="problem section">
+  <div class="wrap problem__grid">
+    <div>
+      <span class="eyebrow" data-reveal>The problem</span>
+      <p class="problem__big" data-reveal style="--d:100ms">
+        The average role gets <span class="mark">250+ applications.</span>
+        Yours shouldn’t read like the other 249.
+      </p>
+      <span class="hand" data-reveal style="--d:200ms; font-size:1.4rem; display:inline-block; margin-top:1.2rem;">← this is why good people stay stuck</span>
+    </div>
+    <ul class="problem__list">
+      <li data-reveal style="--d:100ms">
+        <span class="x">✕</span>
+        <div><strong>Your CV undersells you.</strong><p>Recruiters skim for 7 seconds. Duties don’t stand out. Outcomes do.</p></div>
+      </li>
+      <li data-reveal style="--d:180ms">
+        <span class="x">✕</span>
+        <div><strong>Applying is a full-time job.</strong><p>Tailoring every application takes hours a day. Most people burn out by week two.</p></div>
+      </li>
+      <li data-reveal style="--d:260ms">
+        <span class="x">✕</span>
+        <div><strong>Interviews are a different game.</strong><p>Great on paper, underprepared in the room, and the offer goes to someone else.</p></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= SERVICES ================= -->
+<section class="services section" id="services">
+  <div class="wrap">
+    <div class="section__head">
+      <span class="eyebrow" data-reveal>What we do</span>
+      <h2 data-reveal style="--d:100ms">Everything between you<br />and the offer letter.</h2>
+      <p data-reveal style="--d:200ms">Pick one service, or hand us the whole search. Either way, a real human (a recruiter, not a bot) does the work.</p>
+    </div>
+
+    <div class="services__grid">
+      <article class="service" data-reveal style="--d:0ms">
+        <span class="service__num">S.01</span>
+        <span class="service__tag">most requested</span>
+        <h3>CV &amp; Cover Letter Rewrite</h3>
+        <p>Your CV, rebuilt line by line by recruiters who hire for the roles you want. ATS-safe, outcome-led, with a cover letter system you can reuse.</p>
+        <div class="service__meta"><span>5-day delivery</span><span>2 revision rounds</span><span>ATS check</span></div>
+      </article>
+      <article class="service" data-reveal style="--d:80ms">
+        <span class="service__num">S.02</span>
+        <span class="service__tag">we do the work</span>
+        <h3>Done-for-you Applications</h3>
+        <p>Every week we hand-pick roles that fit you (Nigeria, remote, or visa-sponsored abroad), tailor your documents, and apply. You watch it all from your tracker.</p>
+        <div class="service__meta"><span>20+ apps / month</span><span>You approve the list</span><span>Weekly report</span></div>
+      </article>
+      <article class="service" data-reveal style="--d:160ms">
+        <span class="service__num">S.03</span>
+        <span class="service__tag">mock → real</span>
+        <h3>Interview Prep</h3>
+        <p>Recorded mock interviews with feedback, answer frameworks for your level, and salary negotiation scripts, so you stop leaving money on the table.</p>
+        <div class="service__meta"><span>1:1 sessions</span><span>Recorded feedback</span><span>Negotiation scripts</span></div>
+      </article>
+      <article class="service" data-reveal style="--d:240ms">
+        <span class="service__num">S.04</span>
+        <span class="service__tag">get found</span>
+        <h3>LinkedIn &amp; Visibility</h3>
+        <p>A profile overhaul that puts you in recruiter searches, plus an outreach template pack for the hidden job market most people never tap.</p>
+        <div class="service__meta"><span>Profile rewrite</span><span>Outreach templates</span><span>Keyword audit</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROCESS ================= -->
+<section class="process section" id="process">
+  <div class="wrap">
+    <div class="section__head">
+      <span class="eyebrow" data-reveal>How it works</span>
+      <h2 data-reveal style="--d:100ms">Four steps. You do one of them.</h2>
+      <p data-reveal style="--d:200ms">From first call to first interview in about three weeks. Here’s the whole thing.</p>
+    </div>
+    <div class="process__steps">
+      <div class="step" data-reveal style="--d:0ms">
+        <div class="step__num">01</div>
+        <h3>Intake call</h3>
+        <p>A free 20-minute video call. We learn your goals, review your current CV, and tell you honestly if we can help.</p>
+        <span class="step__time">You · 20 min</span>
+      </div>
+      <div class="step" data-reveal style="--d:80ms">
+        <div class="step__num">02</div>
+        <h3>Documents &amp; strategy</h3>
+        <p>You upload your CV and work history. We rebuild everything and agree on a target role list together.</p>
+        <span class="step__time">Us · 5 days</span>
+      </div>
+      <div class="step" data-reveal style="--d:160ms">
+        <div class="step__num">03</div>
+        <h3>We apply, you track</h3>
+        <p>Tailored applications go out every week. Every single one appears in your tracker. Nothing happens in the dark.</p>
+        <span class="step__time">Us · weekly</span>
+      </div>
+      <div class="step" data-reveal style="--d:240ms">
+        <div class="step__num">04</div>
+        <h3>Interview &amp; negotiate</h3>
+        <p>When interviews land, we prep you for each one and script the salary conversation before you have it.</p>
+        <span class="step__time">Together</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TRACKER ================= -->
+<section class="tracker section" id="tracker">
+  <div class="wrap">
+    <div class="section__head">
+      <span class="eyebrow" data-reveal>Your tracker</span>
+      <h2 data-reveal style="--d:100ms">See every application.<br />As it happens.</h2>
+      <p data-reveal style="--d:200ms">No “trust us, we applied.” Your personal board shows every role, every status, every reply, updated in real time.</p>
+      <span class="hand" data-reveal style="--d:280ms">this is what clients check at 1am ↓</span>
+    </div>
+
+    <div class="tracker__frame" data-reveal style="--d:150ms">
+      <div class="tracker__bar">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="url">app.landed.ng/tracker/chiamaka</span>
+      </div>
+      <div class="tracker__cols">
+        <div class="tcol">
+          <div class="tcol__head">Applied <b>14</b></div>
+          <div class="tcard"><strong>Product Designer</strong><span>Moniepoint</span><span class="loc">Lagos · Hybrid</span></div>
+          <div class="tcard"><strong>Growth Analyst</strong><span>PiggyVest</span><span class="loc">Lagos</span></div>
+          <div class="tcard"><strong>UX Writer</strong><span>Remote · US startup</span><span class="loc">Remote · $</span></div>
+        </div>
+        <div class="tcol">
+          <div class="tcol__head">In review <b>5</b></div>
+          <div class="tcard"><strong>Data Analyst</strong><span>Flutterwave</span><span class="loc">Lagos</span></div>
+          <div class="tcard tcard--hl"><strong>Product Manager</strong><span>UK fintech · visa sponsor</span><span class="loc">London · £</span></div>
+        </div>
+        <div class="tcol">
+          <div class="tcol__head">Interview <b>3</b></div>
+          <div class="tcard"><strong>Snr. Product Designer</strong><span>Canadian bank · remote</span><span class="loc">Toronto · CA$</span></div>
+          <div class="tcard"><strong>Product Lead</strong><span>Kuda</span><span class="loc">Lagos</span></div>
+        </div>
+        <div class="tcol">
+          <div class="tcol__head">Offer <b>1</b></div>
+          <div class="tcard tcard--offer"><strong>Product Manager</strong><span>Offer received · negotiating</span><span class="loc">Remote · $2,800/mo</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRICING ================= -->
+<section class="pricing section" id="pricing">
+  <div class="wrap">
+    <div class="section__head">
+      <span class="eyebrow" data-reveal>Packages</span>
+      <h2 data-reveal style="--d:100ms">Pay for the work.<br />Not for promises.</h2>
+      <p data-reveal style="--d:200ms">Transparent pricing, card or bank transfer via Paystack. Monthly plans cancel anytime.</p>
+      <button class="pricing__toggle" id="curToggle" aria-pressed="false" data-reveal style="--d:260ms">
+        <span class="cur on" data-cur="ngn">₦ NGN</span>
+        <span class="switch" aria-hidden="true"></span>
+        <span class="cur" data-cur="usd">$ USD</span>
+      </button>
+    </div>
+
+    <div class="plans">
+      <article class="plan" data-reveal style="--d:0ms">
+        <span class="plan__name">The Rewrite</span>
+        <div class="plan__price" data-ngn="₦45,000" data-usd="$29">₦45,000</div>
+        <span class="plan__per">one-off</span>
+        <p class="plan__desc">Your documents, fixed. For people who want to apply themselves but need a CV that actually works.</p>
+        <ul class="plan__feats">
+          <li>Full CV rewrite by a recruiter</li>
+          <li>ATS optimisation check</li>
+          <li>Reusable cover letter system</li>
+          <li>2 revision rounds · 5-day delivery</li>
+        </ul>
+        <a href="#book" class="btn btn--ghost">Start with a rewrite</a>
+      </article>
+
+      <article class="plan plan--pop" data-reveal style="--d:100ms">
+        <span class="plan__badge">most people pick this</span>
+        <span class="plan__name">The Search</span>
+        <div class="plan__price" data-ngn="₦120,000" data-usd="$79">₦120,000</div>
+        <span class="plan__per">per month · cancel anytime</span>
+        <p class="plan__desc">The full done-for-you search. We apply, you track, interviews come to you.</p>
+        <ul class="plan__feats">
+          <li>Everything in The Rewrite</li>
+          <li>20+ tailored applications monthly</li>
+          <li>You approve every target role</li>
+          <li>Live tracker + weekly report</li>
+          <li>Interview prep for every invite</li>
+        </ul>
+        <a href="#book" class="btn btn--primary">Book the intake call</a>
+      </article>
+
+      <article class="plan" data-reveal style="--d:200ms">
+        <span class="plan__name">The Executive</span>
+        <div class="plan__price" data-ngn="₦250,000" data-usd="$165">₦250,000</div>
+        <span class="plan__per">per month · cancel anytime</span>
+        <p class="plan__desc">For senior roles and relocations. A dedicated consultant runs your entire search end-to-end.</p>
+        <ul class="plan__feats">
+          <li>Everything in The Search</li>
+          <li>Dedicated career consultant</li>
+          <li>Visa-sponsored &amp; relocation targeting</li>
+          <li>Unlimited mock interviews</li>
+          <li>Salary negotiation handled with you</li>
+        </ul>
+        <a href="#book" class="btn btn--ghost">Talk to us first</a>
+      </article>
+    </div>
+
+    <p class="pricing__fine" data-reveal style="--d:300ms">
+      ⓘ Placeholder pricing: final packages confirmed with the client. Payments via Paystack (card &amp; bank transfer).
+    </p>
+  </div>
+</section>
+
+<!-- ================= TESTIMONIALS ================= -->
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="section__head">
+      <span class="eyebrow" data-reveal>Client stories</span>
+      <h2 data-reveal style="--d:100ms">People like you.<br />New jobs, new cities.</h2>
+    </div>
+    <div class="quotes">
+      <article class="quote" data-reveal style="--d:0ms">
+        <p class="quote__text">I’d applied to maybe 200 roles myself and heard nothing. They rewrote my CV, took over the applications, and I had three interviews in five weeks.</p>
+        <div class="quote__who">
+          <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Portrait of Adaeze O." loading="lazy" />
+          <div>
+            <strong>Adaeze O.</strong>
+            <span>Product Manager · Lagos</span>
+            <div class="quote__result">✓ Hired · fintech, 2× previous salary</div>
+          </div>
+        </div>
+      </article>
+      <article class="quote" data-reveal style="--d:100ms">
+        <p class="quote__text">The tracker is what sold me. I could see every application, every reply. Nothing hidden. When the Toronto interview came, we prepped for two weeks straight.</p>
+        <div class="quote__who">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Portrait of Tunde B." loading="lazy" />
+          <div>
+            <strong>Tunde B.</strong>
+            <span>Data Analyst · relocated to Toronto</span>
+            <div class="quote__result">✓ Visa-sponsored role, CA$78k</div>
+          </div>
+        </div>
+      </article>
+      <article class="quote" data-reveal style="--d:200ms">
+        <p class="quote__text">The mock interviews were brutal, in a good way. I walked into the real one having already answered every question they asked. Negotiated $400 more per month.</p>
+        <div class="quote__who">
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Portrait of Fatima S." loading="lazy" />
+          <div>
+            <strong>Fatima S.</strong>
+            <span>UX Designer · remote, US company</span>
+            <div class="quote__result">✓ Remote role, $2,600/mo</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="faq section" id="faq" style="padding-top:0">
+  <div class="wrap">
+    <div class="section__head">
+      <span class="eyebrow" data-reveal>Straight answers</span>
+      <h2 data-reveal style="--d:100ms">Asked every week.<br />Answered honestly.</h2>
+    </div>
+    <div class="faq__list">
+      <div class="faq__item" data-reveal>
+        <button class="faq__q" aria-expanded="false">Do you guarantee I’ll get a job?<span class="pm">+</span></button>
+        <div class="faq__a"><p>No, and be careful of anyone who says they do. Hiring decisions belong to employers. What we guarantee is the work: a recruiter-grade CV, a set number of tailored applications every month, and prep for every interview you get. That’s what our contracts say, word for word.</p></div>
+      </div>
+      <div class="faq__item" data-reveal>
+        <button class="faq__q" aria-expanded="false">How do you apply on my behalf?<span class="pm">+</span></button>
+        <div class="faq__a"><p>After your intake call, we agree on a target role list. You approve it before anything goes out. Applications are sent with your documents and a dedicated email alias you can see. Every application appears in your tracker with its status.</p></div>
+      </div>
+      <div class="faq__item" data-reveal>
+        <button class="faq__q" aria-expanded="false">Can you help me get a job abroad?<span class="pm">+</span></button>
+        <div class="faq__a"><p>Yes. We target remote roles with international companies and on-site roles with confirmed visa sponsorship, mostly UK, Canada, and the US. We’re upfront about which paths are realistic for your profile before you pay anything.</p></div>
+      </div>
+      <div class="faq__item" data-reveal>
+        <button class="faq__q" aria-expanded="false">How do payments work?<span class="pm">+</span></button>
+        <div class="faq__a"><p>Card or bank transfer via Paystack, in naira or dollars. You sign a simple service agreement before the first payment. It spells out exactly what we deliver, timelines, and the cancellation terms. Monthly plans cancel anytime.</p></div>
+      </div>
+      <div class="faq__item" data-reveal>
+        <button class="faq__q" aria-expanded="false">What do you need from me?<span class="pm">+</span></button>
+        <div class="faq__a"><p>Your current CV (however rough), your work history, and 20 minutes for the intake call. After that, about 30 minutes a week to review your target list and reports. We handle the rest.</p></div>
+      </div>
+      <div class="faq__item" data-reveal>
+        <button class="faq__q" aria-expanded="false">What if I’m not happy with the work?<span class="pm">+</span></button>
+        <div class="faq__a"><p>The Rewrite includes two revision rounds, though most clients need one. Monthly plans are cancel-anytime, so you’re never locked in. If we miss a delivery commitment in your agreement, that month is free.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FINAL CTA ================= -->
+<section class="final section" id="book">
+  <div class="wrap">
+    <span class="eyebrow" data-reveal style="color:rgba(251,249,244,0.6)">Free intake call · 20 minutes</span>
+    <h2 data-reveal style="--d:100ms">Your next role is out there.<br /><em>Let’s go get it.</em></h2>
+    <p data-reveal style="--d:200ms">Book a free call. We’ll review your CV live, tell you what’s holding it back, and map your search, whether you sign up or not.</p>
+    <div data-reveal style="--d:300ms">
+      <a href="#" class="btn btn--primary" data-magnet style="font-size:1.05rem; padding:1.05rem 2.2rem;">Book your free intake call <span class="arr">→</span></a>
+    </div>
+    <span class="hand" data-reveal style="--d:380ms">no card, no pressure. just a plan ↑</span>
+  </div>
+</section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__logo">Landed<sup>®</sup></div>
+        <p class="footer__tag">A done-for-you career service. CVs, applications, and interview prep, handled by recruiters.</p>
+      </div>
+      <div>
+        <h4>Service</h4>
+        <ul>
+          <li><a href="#services">CV Rewriting</a></li>
+          <li><a href="#services">Applications</a></li>
+          <li><a href="#services">Interview Prep</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Terms &amp; Privacy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:hello@landed.ng">hello@landed.ng</a></li>
+          <li><a href="#">WhatsApp</a></li>
+          <li><a href="#">Lagos, Nigeria</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__base">
+      <span>© 2026 Landed Career Studio. All rights reserved.</span>
+      <span>Landed is a career services company. We do not guarantee employment. We guarantee the work.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= SCRIPTS ================= -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script>
+(function () {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hasGsap = typeof gsap !== 'undefined';
+
+  /* ---------- Lenis smooth scroll (sole engine) ---------- */
+  let lenis = null;
+  if (!reduced && typeof Lenis !== 'undefined') {
+    lenis = new Lenis({ duration: 1.1, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+    if (hasGsap) {
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add(t => lenis.raf(t * 1000));
+      gsap.ticker.lagSmoothing(0);
+    } else {
+      const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
+      requestAnimationFrame(raf);
+    }
+    // Anchor links through Lenis
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href');
+        if (id.length > 1 && document.querySelector(id)) {
+          e.preventDefault();
+          lenis.scrollTo(id, { offset: -72 });
+        }
+      });
+    });
+  }
+
+  /* ---------- Nav scroll state ---------- */
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 24);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* ---------- Reveal on scroll (IO, stagger via --d) ---------- */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+
+  /* ---------- Hero intro + red-pen circle draw ---------- */
+  const circle = document.getElementById('circlePath');
+  if (circle) {
+    const len = circle.getTotalLength();
+    circle.style.strokeDasharray = len;
+    circle.style.strokeDashoffset = reduced ? 0 : len;
+    if (!reduced && hasGsap) {
+      gsap.to(circle, { strokeDashoffset: 0, duration: 1.1, delay: 0.9, ease: 'power2.inOut' });
+    }
+  }
+  if (!reduced && hasGsap) {
+    gsap.from('#hero-h1 .line', {
+      yPercent: 60, opacity: 0, duration: 1, stagger: 0.12, ease: 'power3.out', delay: 0.15
+    });
+    gsap.from('.hero__visual .chip', {
+      scale: 0.9, opacity: 0, duration: 0.6, stagger: 0.12, ease: 'back.out(1.6)', delay: 0.8
+    });
+    // Gentle float on chips
+    document.querySelectorAll('[data-float]').forEach((c, i) => {
+      gsap.to(c, { y: i % 2 ? 8 : -8, duration: 2.6 + i * 0.4, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+    });
+    // Subtle parallax on the doc
+    gsap.to('#heroDoc', {
+      y: -30, rotate: 0.5, ease: 'none',
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 }
+    });
+  }
+
+  /* ---------- Counters ---------- */
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = +el.dataset.count;
+    const obs = new IntersectionObserver(([en]) => {
+      if (!en.isIntersecting) return;
+      obs.disconnect();
+      if (reduced || !hasGsap) { el.textContent = target.toLocaleString(); return; }
+      const obj = { v: 0 };
+      gsap.to(obj, {
+        v: target, duration: 1.6, ease: 'power2.out',
+        onUpdate: () => { el.textContent = Math.round(obj.v).toLocaleString() + (target >= 1000 ? '+' : ''); }
+      });
+    }, { threshold: 0.6 });
+    obs.observe(el);
+  });
+
+  /* ---------- Magnetic buttons (subtle) ---------- */
+  if (!reduced && hasGsap && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.querySelectorAll('[data-magnet]').forEach(btn => {
+      const xTo = gsap.quickTo(btn, 'x', { duration: 0.4, ease: 'power3.out' });
+      const yTo = gsap.quickTo(btn, 'y', { duration: 0.4, ease: 'power3.out' });
+      btn.addEventListener('mousemove', e => {
+        const r = btn.getBoundingClientRect();
+        xTo((e.clientX - r.left - r.width / 2) * 0.18);
+        yTo((e.clientY - r.top - r.height / 2) * 0.28);
+      });
+      btn.addEventListener('mouseleave', () => { xTo(0); yTo(0); });
+    });
+  }
+
+  /* ---------- Currency toggle ---------- */
+  const toggle = document.getElementById('curToggle');
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      const usd = toggle.getAttribute('aria-pressed') !== 'true';
+      toggle.setAttribute('aria-pressed', String(usd));
+      toggle.querySelectorAll('.cur').forEach(c => c.classList.toggle('on', (c.dataset.cur === 'usd') === usd));
+      document.querySelectorAll('.plan__price').forEach(p => {
+        const next = usd ? p.dataset.usd : p.dataset.ngn;
+        if (hasGsap && !reduced) {
+          gsap.to(p, { opacity: 0, y: -6, duration: 0.15, ease: 'power1.in', onComplete: () => {
+            p.textContent = next;
+            gsap.to(p, { opacity: 1, y: 0, duration: 0.25, ease: 'power2.out' });
+          }});
+        } else { p.textContent = next; }
+      });
+    });
+  }
+
+  /* ---------- FAQ accordion ---------- */
+  document.querySelectorAll('.faq__item').forEach(item => {
+    const q = item.querySelector('.faq__q');
+    const a = item.querySelector('.faq__a');
+    q.addEventListener('click', () => {
+      const open = item.classList.toggle('open');
+      q.setAttribute('aria-expanded', String(open));
+      a.style.maxHeight = open ? a.scrollHeight + 'px' : '0px';
+    });
+  });
+})();
+</script>
+</body>
+</html>
